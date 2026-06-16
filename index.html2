@@ -1,0 +1,2228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CalcHub — Free UK Financial Calculators</title>
+<meta name="description" content="Free UK calculators: salary, stamp duty, VAT, mortgage, savings, currency converter and mileage. Fast, private, no sign-up.">
+
+<!-- ═══════════════════════════════════════════════════════
+     GOOGLE ADSENSE
+     1. Sign up at https://adsense.google.com
+     2. Replace YOUR_PUBLISHER_ID below with ca-pub-XXXXXXXXXX
+     3. Uncomment the script tag
+     ════════════════════════════════════════════════════════ -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9293598859174742" crossorigin="anonymous"></script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #F2F2F7;
+  --surface:   #FFFFFF;
+  --surface2:  #F2F2F7;
+  --surface3:  #E5E5EA;
+  --blue:      #007AFF;
+  --blue-lo:   rgba(0,122,255,0.12);
+  --orange:    #FF9500;
+  --red:       #FF3B30;
+  --green:     #34C759;
+  --white:     #FFFFFF;
+  --label:     #1C1C1E;
+  --label2:    #6E6E73;
+  --label3:    rgba(0,0,0,0.20);
+  --sep:       rgba(0,0,0,0.10);
+
+  --key-num:   #333333;
+  --key-fn:    #A5A5A5;
+  --key-op:    #FF9500;
+
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  --r-sm:  10px;
+  --r-md:  16px;
+  --r-lg:  22px;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--label);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1rem 5rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── HEADER ─────────────────────────────────── */
+header {
+  text-align: center;
+  margin-bottom: 2.2rem;
+}
+header h1 {
+  font-size: clamp(1.8rem, 5vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--label);
+}
+header h1 em {
+  font-style: normal;
+  color: var(--blue);
+}
+header p {
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--label2);
+  letter-spacing: 0.005em;
+}
+
+/* ── HEADER NAV ─────────────────────────────── */
+header {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 2.2rem;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-brand { text-align: left; }
+.menu-btn {
+  background: var(--surface2);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--label);
+  flex-shrink: 0;
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.menu-btn:hover { background: var(--surface3); }
+
+/* ── SLIDE-IN MENU ───────────────────────────── */
+.menu-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  z-index: 100;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.menu-overlay.open { display: block; }
+
+.menu-panel {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 280px;
+  height: 100%;
+  background: #FFFFFF;
+  z-index: 101;
+  box-shadow: -4px 0 32px rgba(0,0,0,0.12);
+  transition: right 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.menu-panel.open { right: 0; }
+
+.menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.3rem 1.2rem 1rem;
+  border-bottom: 0.5px solid rgba(0,0,0,0.08);
+  flex-shrink: 0;
+}
+.menu-title { font-size: 1.15rem; font-weight: 700; color: var(--label); }
+.menu-close {
+  background: var(--surface2);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--label2);
+}
+.menu-section {
+  padding: 0.9rem 1.2rem 0.3rem;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.72rem 1.2rem;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  color: var(--label);
+  transition: background 0.12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.menu-item:hover { background: var(--surface2); }
+.menu-item svg { width: 17px; height: 17px; color: var(--label2); flex-shrink: 0; }
+.menu-divider { height: 0.5px; background: rgba(0,0,0,0.08); margin: 0.5rem 0; }
+.menu-footer {
+  margin-top: auto;
+  padding: 1.2rem;
+  font-size: 0.72rem;
+  color: var(--label2);
+  line-height: 1.7;
+  border-top: 0.5px solid rgba(0,0,0,0.08);
+}
+
+/* ── ABOUT SHEET ─────────────────────────────── */
+.about-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 200;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  align-items: flex-end;
+  justify-content: center;
+}
+.about-overlay.open { display: flex; }
+.about-sheet {
+  background: #FFFFFF;
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-width: 440px;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 1rem 1.5rem 2rem;
+  animation: slideUp 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.about-handle {
+  width: 36px; height: 4px;
+  background: rgba(0,0,0,0.12);
+  border-radius: 2px;
+  margin: 0 auto 1.3rem;
+}
+.about-logo { font-size: 1.9rem; font-weight: 700; color: var(--label); }
+.about-logo em { font-style: normal; color: var(--blue); }
+.about-tagline { font-size: 0.84rem; color: var(--label2); margin: 0.3rem 0 1.3rem; line-height: 1.5; }
+.about-body { font-size: 0.87rem; color: var(--label); line-height: 1.7; }
+.about-body p { margin-bottom: 0.9rem; }
+.about-tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin: 0.5rem 0 1.1rem;
+}
+.about-tool-chip {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--label);
+  font-weight: 500;
+}
+.about-privacy {
+  background: rgba(0,122,255,0.07);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  font-size: 0.8rem;
+  color: var(--label2);
+  line-height: 1.65;
+}
+.about-privacy strong { color: var(--blue); }
+
+/* ── ADS ─────────────────────────────────────── */
+.ad-slot {
+  width: 100%;
+  max-width: 400px;
+  min-height: 90px;
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px dashed var(--sep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  color: var(--label3);
+  margin-bottom: 1.2rem;
+  overflow: hidden;
+}
+/* hide the placeholder text once AdSense fills the slot */
+.ad-slot ins { display: block; width: 100%; }
+
+/* ── AFFILIATE CARDS ────────────────────────── */
+.affiliate-card {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  text-decoration: none;
+  border: 1px solid var(--sep);
+  transition: box-shadow 0.15s;
+}
+.affiliate-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.07); }
+.affiliate-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.affiliate-body { flex: 1; min-width: 0; }
+.affiliate-title { font-size: 0.87rem; font-weight: 700; color: var(--label); }
+.affiliate-sub   { font-size: 0.75rem; color: var(--label2); margin-top: 2px; line-height: 1.4; }
+.affiliate-cta   { font-size: 0.75rem; font-weight: 700; color: var(--blue); white-space: nowrap; flex-shrink: 0; }
+
+/* ── HUB ────────────────────────────────────── */
+.hub { width: 100%; max-width: 400px; }
+
+/* ── TABS — iOS Segmented Control ───────────── */
+.tabs {
+  display: flex;
+  flex-direction: row;
+  background: var(--surface2);
+  border-radius: 13px;
+  padding: 3px;
+  margin-bottom: 1.2rem;
+  gap: 3px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  border: none;
+  background: transparent;
+  color: var(--label2);
+  font-family: var(--font);
+  font-size: 0.71rem;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.54rem 0.7rem;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  letter-spacing: 0.01em;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--label); }
+.tab-btn.active {
+  background: #FFFFFF;
+  color: #1C1C1E;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.18), inset 0 0.5px 0 rgba(255,255,255,0.9);
+}
+.tab-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+/* ── CARD ───────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow:
+    0 0 0 0.5px rgba(0,0,0,0.08),
+    0 8px 32px rgba(0,0,0,0.10),
+    0 2px 8px rgba(0,0,0,0.06);
+}
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ══════════════════════════════════════════════
+   BASIC CALCULATOR
+   ══════════════════════════════════════════════ */
+#panel-basic { background: #000; }
+
+/* Display */
+.calc-screen {
+  padding: 1.6rem 1.6rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  min-height: 170px;
+  gap: 0.2rem;
+}
+
+.screen-expr {
+  font-family: var(--font);
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.38);
+  text-align: right;
+  min-height: 1.35em;
+  word-break: break-all;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+.screen-expr .op-token { color: var(--orange); }
+
+.screen-num {
+  font-family: var(--font);
+  font-size: clamp(3.2rem, 16vw, 5rem);
+  font-weight: 300;
+  color: var(--white);
+  text-align: right;
+  word-break: break-all;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+/* Keypad — iPhone circles */
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 11px;
+  padding: 0 12px 14px;
+  background: #000;
+}
+
+.key {
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 50%;
+  font-family: var(--font);
+  font-size: 1.45rem;
+  font-weight: 400;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.08s;
+  -webkit-tap-highlight-color: transparent;
+  background: var(--key-num);
+  color: var(--white);
+}
+.key:active { filter: brightness(1.45); }
+
+/* Function keys: C, +/−, %, ⌫ */
+.key.fn  { background: var(--key-fn); color: #000; }
+.key.clr { background: var(--key-fn); color: #000; }
+.key.bk  { background: var(--key-fn); color: #000; font-size: 1.1rem; }
+
+/* Operator keys */
+.key.op { background: var(--key-op); color: var(--white); font-size: 1.65rem; font-weight: 300; }
+.key.eq { background: var(--key-op); color: var(--white); font-size: 1.65rem; font-weight: 300; }
+
+/* Wide 0 key */
+.key.wide {
+  aspect-ratio: unset;
+  border-radius: 50px;
+  justify-content: flex-start;
+  padding-left: 1.5rem;
+  grid-column: span 2;
+}
+
+/* ══════════════════════════════════════════════
+   FORM PANELS (Salary, Currency, Moorage)
+   ══════════════════════════════════════════════ */
+#panel-salary, #panel-currency, #panel-stamp,
+#panel-vat, #panel-mortgage, #panel-savings, #panel-mileage {
+  padding: 1.6rem 1.5rem 2rem;
+}
+
+.section-label {
+  font-size: 0.71rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 1.4rem;
+}
+
+.field { margin-bottom: 1rem; }
+.field label {
+  display: block;
+  font-size: 0.79rem;
+  font-weight: 500;
+  color: var(--label2);
+  margin-bottom: 0.48rem;
+}
+
+input[type=text], input[type=number], select {
+  width: 100%;
+  background: var(--surface2);
+  border: none;
+  border-radius: var(--r-sm);
+  padding: 0.8rem 1rem;
+  color: var(--label);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  outline: none;
+  transition: box-shadow 0.18s;
+  -webkit-appearance: none; appearance: none;
+}
+input[type=text]:focus, input[type=number]:focus, select:focus {
+  box-shadow: 0 0 0 2.5px var(--blue);
+}
+select { cursor: pointer; }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+.salary-subtitle {
+  font-size: 0.82rem;
+  color: var(--label2);
+  margin: -0.4rem 0 1.1rem;
+  line-height: 1.5;
+  min-height: 1.2em;
+}
+.salary-subtitle strong { color: var(--label); font-weight: 600; }
+
+.action-btn {
+  width: 100%;
+  padding: 0.9rem;
+  background: var(--blue);
+  border: none;
+  border-radius: var(--r-md);
+  color: var(--white);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  margin-top: 1.3rem;
+  transition: opacity 0.15s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.action-btn:hover { opacity: 0.88; }
+.action-btn:active { transform: scale(0.98); opacity: 1; }
+
+/* ── RESULT BOX ─────────────────────────────── */
+.result-box {
+  margin-top: 1.4rem;
+  background: var(--surface2);
+  border-radius: var(--r-md);
+  padding: 1.2rem 1.3rem;
+  display: none;
+}
+.result-box.show { display: block; }
+
+.res-label {
+  font-size: 0.71rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--label2);
+  margin-bottom: 0.45rem;
+}
+.res-val {
+  font-family: var(--font);
+  font-size: 2.1rem;
+  font-weight: 600;
+  color: var(--green);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+.res-val.amber { color: var(--orange); }
+
+.breakdown {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 0.5px solid var(--sep);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.brow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.84rem;
+}
+.brow span:first-child { color: var(--label2); }
+.brow span:last-child  { color: var(--label); font-family: var(--mono); font-size: 0.82rem; }
+
+/* ── SALARY SACRIFICE ───────────────────────── */
+.sacrifice-block { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.sacrifice-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  background: var(--surface2);
+  border-radius: var(--r-sm);
+  padding: 0.65rem 0.85rem;
+}
+.sac-text {
+  font-size: 0.8rem;
+  color: var(--label2);
+  white-space: nowrap;
+}
+.sac-amount-wrap {
+  display: flex;
+  align-items: center;
+  background: var(--surface3);
+  border-radius: 7px;
+  padding: 0.22rem 0.55rem;
+  gap: 2px;
+}
+.sac-prefix { font-size: 0.85rem; color: var(--label2); }
+.sac-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 68px;
+  font-family: var(--font);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--label);
+  padding: 0;
+  -webkit-appearance: none;
+}
+.sac-input::placeholder { color: var(--label3); }
+.sac-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: 5px;
+  padding: 0.14rem 0.48rem;
+  white-space: nowrap;
+}
+.sac-badge.ni  { background: rgba(255,149,0,0.14); color: var(--orange); }
+.sac-badge.tax { background: var(--blue-lo); color: var(--blue); }
+.sac-period {
+  background: var(--surface3);
+  border: none;
+  border-radius: 7px;
+  padding: 0.25rem 0.55rem;
+  font-family: var(--font);
+  font-size: 0.82rem;
+  color: var(--label);
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+/* ══════════════════════════════════════════════
+   CURRENCY
+   ══════════════════════════════════════════════ */
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.cur-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+}
+.cur-refresh-btn {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--blue-lo);
+  border: none;
+  border-radius: 20px;
+  color: var(--blue);
+  font-family: var(--font);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.44rem 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.cur-refresh-btn:hover { background: rgba(0,122,255,0.24); }
+.cur-refresh-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.cur-refresh-btn.loading svg { animation: spin 0.8s linear infinite; }
+.cur-rate-note { font-size: 0.72rem; color: var(--label2); }
+.cur-rate-note.err { color: var(--red); }
+
+.cur-add-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+  align-items: center;
+}
+.cur-add-row select {
+  flex: 1;
+  padding: 0.62rem 0.9rem;
+  font-size: 0.85rem;
+}
+.cur-add-btn {
+  background: var(--blue);
+  border: none;
+  border-radius: var(--r-sm);
+  color: var(--white);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.62rem 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+.cur-add-btn:hover { opacity: 0.86; }
+
+/* Currency list — photo-matched: flag circle, name+code, green pill */
+.cur-list {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.85rem;
+}
+
+.cur-row {
+  display: flex;
+  align-items: center;
+  background: transparent;
+  padding: 0.8rem 0;
+  gap: 0.6rem;
+  cursor: pointer;
+  border-bottom: 0.5px solid var(--sep);
+}
+.cur-row:last-child { border-bottom: none; }
+.cur-row:hover { background: rgba(0,0,0,0.02); margin: 0 -0.25rem; padding-left: 0.25rem; padding-right: 0.25rem; border-radius: 8px; }
+
+/* Large circular flag */
+.cur-flag-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.65rem;
+  flex-shrink: 0;
+  overflow: visible;
+  position: relative;
+}
+
+/* Name + code stacked */
+.cur-info { flex: 1; min-width: 0; overflow: hidden; }
+.cur-name-text {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--label);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cur-code-text {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--label2);
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+/* Green pill — amount */
+.cur-pill {
+  background: rgba(0,122,255,0.12);
+  border-radius: 9px;
+  padding: 0.38rem 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.cur-pill.base { background: rgba(0,122,255,0.22); }
+.cur-pill-sym {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #007AFF;
+  flex-shrink: 0;
+}
+.cur-pill.base .cur-pill-sym { color: #007AFF; }
+.cur-amount-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #000000 !important;
+  text-align: right;
+  width: 72px;
+  padding: 0;
+  -webkit-appearance: none;
+}
+.cur-amount-input:focus { color: #000000 !important; }
+.cur-amount-input::placeholder { color: rgba(0,0,0,0.25); }
+.cur-pill.base .cur-amount-input { color: #000000 !important; }
+
+/* Remove button — sits on top-right of flag, no extra row space */
+.cur-remove {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 18px;
+  height: 18px;
+  background: var(--red);
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+  color: #FFFFFF;
+  font-size: 0.58rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s;
+}
+.cur-remove:hover { transform: scale(1.15); }
+
+/* ── LOAN INFO BOX ──────────────────────────── */
+.loan-info {
+  background: var(--surface2);
+  border-radius: var(--r-sm);
+  margin-bottom: 0.8rem;
+  overflow: hidden;
+}
+.loan-info-toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  color: var(--blue);
+  font-family: var(--font);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: left;
+  gap: 0.5rem;
+}
+.loan-info-toggle svg { flex-shrink: 0; transition: transform 0.2s; }
+.loan-info-toggle.open svg { transform: rotate(180deg); }
+.loan-info-body {
+  display: none;
+  padding: 0 1rem 0.9rem;
+  border-top: 0.5px solid var(--sep);
+}
+.loan-info-body.open { display: block; }
+.loan-plan-row {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.6rem 0;
+  border-bottom: 0.5px solid var(--sep);
+  align-items: flex-start;
+}
+.loan-plan-row:last-child { border-bottom: none; }
+.loan-plan-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: var(--blue-lo);
+  color: var(--blue);
+  border-radius: 6px;
+  padding: 0.15rem 0.5rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.loan-plan-desc {
+  font-size: 0.76rem;
+  color: var(--label2);
+  line-height: 1.5;
+}
+
+/* ── SHARED PANEL HELPERS ───────────────────── */
+.panel-note {
+  font-size: 0.74rem;
+  color: var(--label2);
+  margin: -0.9rem 0 1.1rem;
+}
+.res-note {
+  font-size: 0.76rem;
+  color: var(--label2);
+  margin-top: 0.25rem;
+}
+.prefix-wrap { position: relative; }
+.prefix-wrap .prefix {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--label2);
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+.ltv-badge {
+  background: var(--surface2);
+  border-radius: var(--r-sm);
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--blue);
+  text-align: center;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── RESPONSIVE ─────────────────────────────── */
+@media (max-width: 440px) {
+  .hub { max-width: 100%; }
+  .card { border-radius: 18px; }
+  #panel-salary, #panel-currency, #panel-stamp, #panel-vat, #panel-mortgage, #panel-savings, #panel-mileage { padding: 1.3rem 1.1rem 1.6rem; }
+  .row2 { grid-template-columns: 1fr; }
+  .tab-btn .tab-label { display: none; }
+  .keypad { gap: 9px; padding: 0 10px 12px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-brand">
+      <h1>Calc<em>Hub</em></h1>
+      <p>Your free UK financial toolkit</p>
+    </div>
+    <button class="menu-btn" onclick="toggleMenu()" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- Slide-in menu overlay -->
+<div class="menu-overlay" id="menu-overlay" onclick="closeMenu()"></div>
+<div class="menu-panel" id="menu-panel">
+  <div class="menu-header">
+    <span class="menu-title">Calc<em style="font-style:normal;color:var(--blue)">Hub</em></span>
+    <button class="menu-close" onclick="closeMenu()">✕</button>
+  </div>
+
+  <div class="menu-section">Calculators</div>
+  <button class="menu-item" onclick="menuTab('basic')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12h8M12 8v8"/></svg>Basic Calculator
+  </button>
+  <button class="menu-item" onclick="menuTab('salary')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Salary & Tax
+  </button>
+  <button class="menu-item" onclick="menuTab('currency')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3 3 0 0 0-5 2.5c0 3 5 3 5 6a3 3 0 0 1-5 .5"/></svg>Currency Converter
+  </button>
+  <button class="menu-item" onclick="menuTab('stamp')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Stamp Duty
+  </button>
+  <button class="menu-item" onclick="menuTab('vat')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 9h.01M15 15h.01"/><path d="M16 4L8 20"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>VAT Calculator
+  </button>
+  <button class="menu-item" onclick="menuTab('mortgage')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 22V8l9-6 9 6v14"/><rect x="9" y="12" width="6" height="10"/></svg>Mortgage Calculator
+  </button>
+  <button class="menu-item" onclick="menuTab('savings')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Savings / ISA
+  </button>
+  <button class="menu-item" onclick="menuTab('mileage')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Mileage & Fuel
+  </button>
+
+  <div class="menu-divider"></div>
+  <div class="menu-section">Info</div>
+  <button class="menu-item" onclick="openAbout()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>About CalcHub
+  </button>
+
+  <div class="menu-footer">
+    <p>© 2026 CalcHub · Free UK Calculators</p>
+    <p>All calculations run in your browser.</p>
+  </div>
+</div>
+
+<!-- About bottom sheet -->
+<div class="about-overlay" id="about-overlay" onclick="closeAbout(event)">
+  <div class="about-sheet">
+    <div class="about-handle"></div>
+    <div class="about-logo">Calc<em>Hub</em></div>
+    <p class="about-tagline">Free UK financial calculators — no sign-up, no data collection.</p>
+    <div class="about-body">
+      <p>CalcHub brings together the most useful financial calculators for people in the UK. Whether you're checking your take-home pay, calculating stamp duty on a new home, or planning your savings — everything is free and works instantly in your browser.</p>
+      <p style="font-weight:600;margin-bottom:0.5rem">8 free calculators:</p>
+      <div class="about-tools-grid">
+        <div class="about-tool-chip">🧮 Basic</div>
+        <div class="about-tool-chip">💷 Salary & Tax</div>
+        <div class="about-tool-chip">💱 Currency</div>
+        <div class="about-tool-chip">🏠 Stamp Duty</div>
+        <div class="about-tool-chip">🧾 VAT</div>
+        <div class="about-tool-chip">🏦 Mortgage</div>
+        <div class="about-tool-chip">📈 Savings / ISA</div>
+        <div class="about-tool-chip">🚗 Mileage</div>
+      </div>
+      <p>All tax rates and thresholds use official HMRC and UK Government figures. Live currency rates are sourced from ExchangeRate-API, updated every hour.</p>
+      <div class="about-privacy">
+        <strong>🔒 Your privacy</strong><br>
+        All calculations run entirely in your browser. We don't collect, store or share any of your financial data — ever.
+      </div>
+    </div>
+    <button class="action-btn" style="margin-top:1.2rem" onclick="closeAbout({target:document.getElementById('about-overlay')})">Close</button>
+  </div>
+</div>
+
+<!-- Ad slot: below header (leaderboard / banner)
+     After AdSense approval, replace the placeholder div with the <ins> tag from your AdSense dashboard -->
+<div class="ad-slot" id="ad-top">
+  <!-- AdSense unit will appear here -->
+  <span>Advertisement</span>
+</div>
+
+<div class="hub">
+
+  <!-- iOS-style segmented control -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('basic',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12h8M12 8v8"/></svg>
+      <span class="tab-label">Basic</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('salary',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span class="tab-label">Salary</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('currency',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3 3 0 0 0-5 2.5c0 3 5 3 5 6a3 3 0 0 1-5 .5"/><path d="M12 6v2m0 8v2"/></svg>
+      <span class="tab-label">Currency</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('stamp',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="tab-label">Stamp Duty</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('vat',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 9h.01M15 15h.01"/><path d="M16 4L8 20"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+      <span class="tab-label">VAT</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('mortgage',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 22V8l9-6 9 6v14"/><path d="M9 22V12h6v10"/><rect x="9" y="12" width="6" height="10"/></svg>
+      <span class="tab-label">Mortgage</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('savings',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span class="tab-label">Savings</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('mileage',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span class="tab-label">Mileage</span>
+    </button>
+  </div>
+
+  <div class="card">
+
+    <!-- ══ BASIC ══════════════════════════════════ -->
+    <div class="panel active" id="panel-basic">
+
+      <div class="calc-screen">
+        <div class="screen-expr" id="b-expr">&nbsp;</div>
+        <div class="screen-num" id="b-num">0</div>
+      </div>
+
+      <!-- Matches iPhone Calculator layout exactly -->
+      <div class="keypad">
+        <!-- Row 1: fn keys + operator -->
+        <button class="key clr" onclick="bClear()">C</button>
+        <button class="key bk"  onclick="bBack()">⌫</button>
+        <button class="key fn"  onclick="bPercent()">%</button>
+        <button class="key op"  onclick="bOp('/')">÷</button>
+        <!-- Row 2 -->
+        <button class="key" onclick="bNum('7')">7</button>
+        <button class="key" onclick="bNum('8')">8</button>
+        <button class="key" onclick="bNum('9')">9</button>
+        <button class="key op" onclick="bOp('*')">×</button>
+        <!-- Row 3 -->
+        <button class="key" onclick="bNum('4')">4</button>
+        <button class="key" onclick="bNum('5')">5</button>
+        <button class="key" onclick="bNum('6')">6</button>
+        <button class="key op" onclick="bOp('-')">−</button>
+        <!-- Row 4 -->
+        <button class="key" onclick="bNum('1')">1</button>
+        <button class="key" onclick="bNum('2')">2</button>
+        <button class="key" onclick="bNum('3')">3</button>
+        <button class="key op" onclick="bOp('+')">+</button>
+        <!-- Row 5 -->
+        <button class="key fn" onclick="bSign()">+/−</button>
+        <button class="key" onclick="bNum('0')">0</button>
+        <button class="key" onclick="bDot()">.</button>
+        <button class="key eq" onclick="bEquals()">=</button>
+      </div>
+    </div>
+
+    <!-- ══ SALARY ═════════════════════════════════ -->
+    <div class="panel" id="panel-salary">
+      <div class="section-label">Salary Calculator</div>
+
+      <div class="field">
+        <label>Tax Year</label>
+        <select id="s-taxyear">
+          <option value="2627" selected>2026/27 (6 Apr 2026 – 5 Apr 2027) — Current</option>
+          <option value="2526">2025/26 (6 Apr 2025 – 5 Apr 2026)</option>
+          <option value="2425">2024/25 (6 Apr 2024 – 5 Apr 2025)</option>
+          <option value="2324">2023/24 (6 Apr 2023 – 5 Apr 2024)</option>
+          <option value="2223">2022/23 (6 Apr 2022 – 5 Apr 2023)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Gross Annual Salary</label>
+        <input type="number" id="s-gross" placeholder="e.g. 35,000" min="0" oninput="updateSalarySubtitle()">
+      </div>
+      <div class="salary-subtitle" id="s-subtitle">Enter your salary above to see the breakdown.</div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Pay Frequency</label>
+          <select id="s-freq">
+            <option value="12">Monthly</option>
+            <option value="26">Bi-weekly</option>
+            <option value="52">Weekly</option>
+            <option value="24">Semi-monthly</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Tax Code</label>
+          <input type="text" id="s-taxcode" placeholder="e.g. 1257L" value="1257L" maxlength="8">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Student Loan Plan</label>
+        <div class="loan-info">
+          <button class="loan-info-toggle" onclick="toggleLoanInfo(this)" type="button">
+            <span>Which plan am I on?</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="loan-info-body">
+            <div class="loan-plan-row">
+              <span class="loan-plan-badge">Plan 5</span>
+              <span class="loan-plan-desc">England — undergraduate course started <strong style="color:var(--label)">after 1 Aug 2023</strong>. Repay 9% above £25,000.</span>
+            </div>
+            <div class="loan-plan-row">
+              <span class="loan-plan-badge">Plan 2</span>
+              <span class="loan-plan-desc">England or Wales — course started <strong style="color:var(--label)">on or after 1 Sep 2012</strong>. Repay 9% above £27,295.</span>
+            </div>
+            <div class="loan-plan-row">
+              <span class="loan-plan-badge">Plan 4</span>
+              <span class="loan-plan-desc">Scotland — applies from <strong style="color:var(--label)">April 2021</strong>, even for loans taken before 2021. Repay 9% above £31,395.</span>
+            </div>
+            <div class="loan-plan-row">
+              <span class="loan-plan-badge">Plan 1</span>
+              <span class="loan-plan-desc">Course started <strong style="color:var(--label)">before 1 Sep 2012</strong>, or you lived in <strong style="color:var(--label)">Northern Ireland</strong>. Repay 9% above £24,990.</span>
+            </div>
+            <div class="loan-plan-row">
+              <span class="loan-plan-badge">PG Loan</span>
+              <span class="loan-plan-desc"><strong style="color:var(--label)">Postgraduate study</strong> only. Repay 6% above £21,000.</span>
+            </div>
+          </div>
+        </div>
+        <select id="s-loan">
+          <option value="none">No student loan</option>
+          <option value="5">Plan 5 — England, from Aug 2023 (9% above £25,000)</option>
+          <option value="2">Plan 2 — England/Wales, from Sep 2012 (9% above £27,295)</option>
+          <option value="4">Plan 4 — Scotland, from Apr 2021 (9% above £31,395)</option>
+          <option value="1">Plan 1 — before Sep 2012 or N. Ireland (9% above £24,990)</option>
+          <option value="pg">Postgraduate Loan (6% above £21,000)</option>
+        </select>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Pension (%)</label>
+          <input type="number" id="s-pension" placeholder="e.g. 5" min="0" max="100" step="0.5">
+        </div>
+        <div class="field">
+          <label>Childcare (£/month)</label>
+          <input type="number" id="s-childcare" placeholder="e.g. 243" min="0">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Salary Sacrifice</label>
+        <div class="sacrifice-block">
+          <!-- NI only sacrifice -->
+          <div class="sacrifice-row">
+            <span class="sac-text">I sacrifice</span>
+            <div class="sac-amount-wrap">
+              <span class="sac-prefix">£</span>
+              <input type="number" class="sac-input" id="s-sac-ni-amt" placeholder="0" min="0">
+            </div>
+            <span class="sac-badge ni">NI only</span>
+            <span class="sac-text">of my salary every</span>
+            <select class="sac-period" id="s-sac-ni-per">
+              <option value="year">Year</option>
+              <option value="month" selected>Month</option>
+              <option value="week">Week</option>
+            </select>
+          </div>
+          <!-- Tax exempt sacrifice -->
+          <div class="sacrifice-row">
+            <span class="sac-text">I sacrifice</span>
+            <div class="sac-amount-wrap">
+              <span class="sac-prefix">£</span>
+              <input type="number" class="sac-input" id="s-sac-tax-amt" placeholder="0" min="0">
+            </div>
+            <span class="sac-badge tax">Tax exempt</span>
+            <span class="sac-text">of my salary every</span>
+            <select class="sac-period" id="s-sac-tax-per">
+              <option value="year">Year</option>
+              <option value="month" selected>Month</option>
+              <option value="week">Week</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button class="action-btn" onclick="calcSalary()">See My Breakdown</button>
+
+      <div class="result-box" id="s-result">
+        <div class="res-label">Net Annual Income</div>
+        <div class="res-val" id="s-net">—</div>
+        <div class="breakdown">
+          <div class="brow"><span>Gross Salary</span><span id="s-b-gross">—</span></div>
+          <div class="brow" id="s-pension-row" style="display:none"><span>Pension (pre-tax)</span><span id="s-b-pension">—</span></div>
+          <div class="brow" id="s-childcare-row" style="display:none"><span>Childcare Vouchers</span><span id="s-b-childcare">—</span></div>
+          <div class="brow" id="s-sac-tax-row" style="display:none"><span>Sacrifice <span style="font-size:0.7rem;color:var(--blue)">tax exempt</span></span><span id="s-b-sac-tax">—</span></div>
+          <div class="brow" id="s-sac-ni-row" style="display:none"><span>Sacrifice <span style="font-size:0.7rem;color:var(--orange)">NI only</span></span><span id="s-b-sac-ni">—</span></div>
+          <div class="brow"><span>Personal Allowance</span><span id="s-b-pa">—</span></div>
+          <div class="brow"><span>Income Tax</span><span id="s-b-tax">—</span></div>
+          <div class="brow"><span>National Insurance</span><span id="s-b-ni">—</span></div>
+          <div class="brow" id="s-loan-row" style="display:none"><span>Student Loan</span><span id="s-b-loan">—</span></div>
+          <div class="brow" style="padding-top:0.45rem;border-top:0.5px solid var(--sep)">
+            <span>Take-Home / Period</span>
+            <span id="s-b-period" style="color:var(--blue)">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CURRENCY ════════════════════════════════ -->
+    <div class="panel" id="panel-currency">
+      <div class="section-label">Currency Converter</div>
+      <div class="cur-toolbar">
+        <span class="cur-rate-note" id="c-note">Tap a row to set base. Type to convert.</span>
+        <button class="cur-refresh-btn" id="c-refresh-btn" onclick="refreshAllRates()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12">
+            <path d="M4 4v5h5"/><path d="M20 20v-5h-5"/>
+            <path d="M4 9a9 9 0 0 1 15-2.7M20 15a9 9 0 0 1-15 2.7"/>
+          </svg>
+          Refresh Rates
+        </button>
+      </div>
+      <div class="cur-list" id="c-list"></div>
+      <div class="cur-add-row">
+        <select id="c-add-select"></select>
+        <button class="cur-add-btn" onclick="addCurrency()">+ Add</button>
+      </div>
+
+      <!-- Wise affiliate card
+           Sign up: https://wise.com/gb/business/affiliate
+           Replace YOUR_WISE_AFFILIATE_LINK with your personal affiliate URL -->
+      <a class="affiliate-card" href="YOUR_WISE_AFFILIATE_LINK" target="_blank" rel="noopener sponsored">
+        <div class="affiliate-icon" style="background:#edfaf1;">💸</div>
+        <div class="affiliate-body">
+          <div class="affiliate-title">Send money with Wise</div>
+          <div class="affiliate-sub">Fee-free first transfer up to £500. Always the real exchange rate.</div>
+        </div>
+        <span class="affiliate-cta">Try Wise →</span>
+      </a>
+    </div>
+
+    <!-- ══ STAMP DUTY ══════════════════════════════ -->
+    <div class="panel" id="panel-stamp">
+      <div class="section-label">Stamp Duty Calculator</div>
+      <p class="panel-note">England &amp; Northern Ireland · rates from 1 April 2025</p>
+
+      <div class="field">
+        <label>Property Price</label>
+        <div class="prefix-wrap">
+          <span class="prefix">£</span>
+          <input type="number" id="sd-price" placeholder="e.g. 350000" style="padding-left:1.8rem">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Buyer Type</label>
+        <select id="sd-type">
+          <option value="standard">Standard buyer</option>
+          <option value="ftb">First-time buyer</option>
+          <option value="additional">Additional / Buy-to-let property (+5% surcharge)</option>
+        </select>
+      </div>
+
+      <button class="action-btn" onclick="calcStampDuty()">Calculate Stamp Duty</button>
+
+      <div class="result-box" id="sd-result">
+        <div class="res-label">Stamp Duty (SDLT)</div>
+        <div class="res-val" id="sd-total">—</div>
+        <div class="res-note" id="sd-eff"></div>
+        <div class="breakdown" id="sd-breakdown"></div>
+      </div>
+
+      <!-- MoneySuperMarket affiliate card
+           Sign up via AWIN: https://www.awin.com/gb/advertiser/moneysupermarket-group
+           Replace YOUR_MSM_MORTGAGE_LINK with your affiliate URL -->
+      <a class="affiliate-card" href="YOUR_MSM_MORTGAGE_LINK" target="_blank" rel="noopener sponsored">
+        <div class="affiliate-icon" style="background:#fff4e5;">🏡</div>
+        <div class="affiliate-body">
+          <div class="affiliate-title">Compare mortgages</div>
+          <div class="affiliate-sub">Find the best mortgage deal for your budget on MoneySuperMarket.</div>
+        </div>
+        <span class="affiliate-cta">Compare →</span>
+      </a>
+    </div>
+
+    <!-- ══ VAT ══════════════════════════════════════ -->
+    <div class="panel" id="panel-vat">
+      <div class="section-label">VAT Calculator</div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Mode</label>
+          <select id="v-mode" onchange="calcVAT()">
+            <option value="add">Add VAT (net → gross)</option>
+            <option value="remove">Remove VAT (gross → net)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>VAT Rate</label>
+          <select id="v-rate" onchange="calcVAT()">
+            <option value="20">20% Standard</option>
+            <option value="5">5% Reduced</option>
+            <option value="0">0% Zero rated</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Amount (£)</label>
+        <div class="prefix-wrap">
+          <span class="prefix">£</span>
+          <input type="number" id="v-amount" placeholder="Enter amount" oninput="calcVAT()" style="padding-left:1.8rem">
+        </div>
+      </div>
+
+      <div class="result-box show" id="v-result" style="margin-top:1rem">
+        <div class="breakdown" style="margin-top:0;padding-top:0;border-top:none">
+          <div class="brow"><span>Net (ex-VAT)</span><span id="v-net">—</span></div>
+          <div class="brow"><span id="v-rate-label">VAT (20%)</span><span id="v-vat">—</span></div>
+          <div class="brow" style="padding-top:0.45rem;border-top:0.5px solid var(--sep)">
+            <span><strong>Gross (inc-VAT)</strong></span><span id="v-gross" style="color:var(--blue);font-weight:700">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MORTGAGE ══════════════════════════════════ -->
+    <div class="panel" id="panel-mortgage">
+      <div class="section-label">Mortgage Calculator</div>
+
+      <div class="field">
+        <label>Property Price</label>
+        <div class="prefix-wrap">
+          <span class="prefix">£</span>
+          <input type="number" id="m-price" placeholder="e.g. 350000" oninput="updateLTV()" style="padding-left:1.8rem">
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Deposit (£)</label>
+          <div class="prefix-wrap">
+            <span class="prefix">£</span>
+            <input type="number" id="m-deposit" placeholder="e.g. 70000" oninput="updateLTV()" style="padding-left:1.8rem">
+          </div>
+        </div>
+        <div class="field">
+          <label>LTV</label>
+          <div class="ltv-badge" id="m-ltv">—</div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Interest Rate (%)</label>
+          <input type="number" id="m-rate" placeholder="e.g. 4.5" step="0.05">
+        </div>
+        <div class="field">
+          <label>Term (years)</label>
+          <input type="number" id="m-term" placeholder="e.g. 25" min="1" max="40">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Repayment Type</label>
+        <select id="m-type">
+          <option value="repayment">Repayment</option>
+          <option value="interest">Interest Only</option>
+        </select>
+      </div>
+
+      <button class="action-btn" onclick="calcMortgage()">Calculate</button>
+
+      <div class="result-box" id="m-result">
+        <div class="res-label">Monthly Payment</div>
+        <div class="res-val" id="m-monthly">—</div>
+        <div class="breakdown">
+          <div class="brow"><span>Loan Amount</span><span id="m-b-loan">—</span></div>
+          <div class="brow"><span>Total Interest</span><span id="m-b-interest">—</span></div>
+          <div class="brow" style="padding-top:0.45rem;border-top:0.5px solid var(--sep)">
+            <span>Total Repaid</span><span id="m-b-total" style="color:var(--label)">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MoneySuperMarket affiliate card — same link as Stamp Duty tab -->
+      <a class="affiliate-card" href="YOUR_MSM_MORTGAGE_LINK" target="_blank" rel="noopener sponsored">
+        <div class="affiliate-icon" style="background:#fff4e5;">🏦</div>
+        <div class="affiliate-body">
+          <div class="affiliate-title">Compare mortgage rates</div>
+          <div class="affiliate-sub">Search 1,000s of deals. Find the right rate for your home.</div>
+        </div>
+        <span class="affiliate-cta">Compare →</span>
+      </a>
+    </div>
+
+    <!-- ══ SAVINGS / ISA ══════════════════════════════ -->
+    <div class="panel" id="panel-savings">
+      <div class="section-label">Savings / ISA Calculator</div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Starting Amount (£)</label>
+          <div class="prefix-wrap">
+            <span class="prefix">£</span>
+            <input type="number" id="sv-initial" placeholder="e.g. 5000" style="padding-left:1.8rem">
+          </div>
+        </div>
+        <div class="field">
+          <label>Monthly Top-up (£)</label>
+          <div class="prefix-wrap">
+            <span class="prefix">£</span>
+            <input type="number" id="sv-monthly" placeholder="e.g. 200" style="padding-left:1.8rem">
+          </div>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Annual Interest (%)</label>
+          <input type="number" id="sv-rate" placeholder="e.g. 4.5" step="0.1">
+        </div>
+        <div class="field">
+          <label>Years</label>
+          <input type="number" id="sv-years" placeholder="e.g. 10" min="1" max="50">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Account Type</label>
+        <select id="sv-type">
+          <option value="isa">Cash ISA (tax-free · £20k/yr limit)</option>
+          <option value="regular">Regular Savings</option>
+          <option value="lisa">Lifetime ISA (25% bonus · max £4k/yr · buy home or retire)</option>
+        </select>
+      </div>
+
+      <button class="action-btn" onclick="calcSavings()">Calculate Growth</button>
+
+      <div class="result-box" id="sv-result">
+        <div class="res-label">Final Balance</div>
+        <div class="res-val" id="sv-total">—</div>
+        <div class="breakdown">
+          <div class="brow"><span>Total Contributed</span><span id="sv-b-contrib">—</span></div>
+          <div class="brow"><span>Interest Earned</span><span id="sv-b-interest" style="color:var(--green)">—</span></div>
+          <div class="brow" id="sv-bonus-row" style="display:none">
+            <span>LISA Gov Bonus (25%)</span><span id="sv-b-bonus" style="color:var(--green)">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MILEAGE ════════════════════════════════════ -->
+    <div class="panel" id="panel-mileage">
+      <div class="section-label">Mileage &amp; Fuel Calculator</div>
+
+      <div class="field">
+        <label>Distance (miles)</label>
+        <input type="number" id="mi-miles" placeholder="e.g. 150">
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Fuel Efficiency (MPG)</label>
+          <input type="number" id="mi-mpg" placeholder="e.g. 40">
+        </div>
+        <div class="field">
+          <label>Fuel Price (p/litre)</label>
+          <input type="number" id="mi-ppl" placeholder="e.g. 148">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>HMRC Vehicle Type</label>
+        <select id="mi-vehicle">
+          <option value="car">Car / Van — 45p/mile (first 10k) · 25p after</option>
+          <option value="bike">Motorcycle — 24p per mile</option>
+          <option value="cycle">Bicycle — 20p per mile</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Miles driven this tax year so far</label>
+        <input type="number" id="mi-ytd" placeholder="e.g. 8000 (used to calculate 10k car threshold)">
+      </div>
+
+      <button class="action-btn" onclick="calcMileage()">Calculate</button>
+
+      <div class="result-box" id="mi-result">
+        <div class="breakdown" style="margin-top:0;padding-top:0;border-top:none">
+          <div class="brow"><span>⛽ Fuel Cost</span><span id="mi-fuel">—</span></div>
+          <div class="brow"><span>📋 HMRC Mileage Claim</span><span id="mi-claim" style="color:var(--green)">—</span></div>
+          <div class="brow" style="padding-top:0.45rem;border-top:0.5px solid var(--sep)">
+            <span>💰 Net Claim Profit</span><span id="mi-profit" style="color:var(--blue)">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /hub -->
+
+<script>
+/* ─── TABS ──────────────────────────────────────────────── */
+function switchTab(name, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ─── BASIC CALCULATOR ──────────────────────────────────── */
+const S = { current: '0', prev: null, op: null, exprParts: [], fresh: false };
+const SYM = { '+':'+', '-':'−', '*':'×', '/':'÷' };
+
+function renderScreen() {
+  const numEl  = document.getElementById('b-num');
+  const exprEl = document.getElementById('b-expr');
+  numEl.textContent = S.current;
+  if (S.exprParts.length === 0) {
+    exprEl.innerHTML = '&nbsp;';
+  } else {
+    exprEl.innerHTML = S.exprParts.map(t => {
+      const isOp = ['+','−','×','÷','='].includes(t);
+      return isOp ? `<span class="op-token">${t}</span>` : t;
+    }).join(' ');
+  }
+  // Auto-shrink large numbers
+  const len = S.current.length;
+  numEl.style.fontSize = len > 9 ? 'clamp(1.8rem,8vw,2.6rem)' : len > 6 ? 'clamp(2.4rem,11vw,3.8rem)' : '';
+}
+
+function bNum(d) {
+  if (S.fresh) { S.current = d; S.fresh = false; }
+  else if (S.current === '0') S.current = d;
+  else if (S.current.replace(/[^0-9]/g,'').length < 12) S.current += d;
+  renderScreen();
+}
+function bDot() {
+  if (S.fresh) { S.current = '0.'; S.fresh = false; }
+  else if (!S.current.includes('.')) S.current += '.';
+  renderScreen();
+}
+function bBack() {
+  if (S.fresh || S.current.length <= 1) { S.current = '0'; S.fresh = false; }
+  else S.current = S.current.slice(0, -1) || '0';
+  renderScreen();
+}
+function bOp(op) {
+  if (S.op !== null && !S.fresh) {
+    const res = compute(parseFloat(S.prev), parseFloat(S.current), S.op);
+    S.exprParts.push(S.current, SYM[op]);
+    S.current = fmtNum(res);
+    S.prev = res;
+  } else {
+    S.exprParts.push(S.current, SYM[op]);
+    S.prev = parseFloat(S.current);
+  }
+  S.op = op; S.fresh = true;
+  renderScreen();
+}
+function bEquals() {
+  if (S.op === null) return;
+  const res = compute(parseFloat(S.prev), parseFloat(S.current), S.op);
+  S.exprParts.push(S.current, '=');
+  S.current = fmtNum(res);
+  S.op = null; S.prev = null; S.fresh = true;
+  renderScreen();
+}
+function bClear() {
+  S.current = '0'; S.prev = null; S.op = null; S.exprParts = []; S.fresh = false;
+  renderScreen();
+}
+function bSign() {
+  const n = parseFloat(S.current);
+  if (!isNaN(n)) { S.current = fmtNum(n * -1); renderScreen(); }
+}
+function bPercent() {
+  const n = parseFloat(S.current);
+  if (!isNaN(n)) { S.current = fmtNum(n / 100); renderScreen(); }
+}
+function compute(a, b, op) {
+  if (op === '+') return a + b;
+  if (op === '-') return a - b;
+  if (op === '*') return a * b;
+  if (op === '/') return b === 0 ? NaN : a / b;
+}
+function fmtNum(n) {
+  if (isNaN(n) || !isFinite(n)) return 'Error';
+  if (Number.isInteger(n)) return String(n);
+  return parseFloat(n.toFixed(10)).toString();
+}
+
+/* ─── SALARY ────────────────────────────────────────────── */
+function money(n) {
+  return '£' + n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function toggleLoanInfo(btn) {
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+}
+
+function updateSalarySubtitle() {
+  const val = parseFloat(document.getElementById('s-gross').value);
+  const el  = document.getElementById('s-subtitle');
+  if (!val || val <= 0) {
+    el.innerHTML = 'Enter your salary above to see the breakdown.';
+  } else {
+    el.innerHTML = `I want to see the breakdown for a salary of <strong>${money(val)}</strong>`;
+  }
+}
+
+function parseTaxCode(code, defaultPA) {
+  defaultPA = defaultPA || 12570;
+  const c = (code || '1257L').toUpperCase().trim();
+  if (c === 'BR')  return { pa: 0, flatRate: 0.20 };
+  if (c === 'D0')  return { pa: 0, flatRate: 0.40 };
+  if (c === 'D1')  return { pa: 0, flatRate: 0.45 };
+  if (c === 'NT')  return { pa: 999999, flatRate: null };
+  if (c === '0T')  return { pa: 0, flatRate: null };
+  const kMatch = c.match(/^K(\d+)$/);
+  if (kMatch) return { pa: -(parseInt(kMatch[1]) * 10), flatRate: null };
+  const lMatch = c.match(/^(\d+)[LMNTYW]?$/);
+  if (lMatch) return { pa: parseInt(lMatch[1]) * 10, flatRate: null };
+  return { pa: defaultPA, flatRate: null };
+}
+
+function calcIncomeTax(grossAfterSacrifice, taxCode, yr) {
+  yr = yr || TAX_YEARS['2425'];
+  const { pa, flatRate } = parseTaxCode(taxCode, yr.pa);
+  if (flatRate !== null) return { tax: grossAfterSacrifice * flatRate, personalAllowance: 0 };
+
+  // Taper personal allowance above £100,000
+  let personalAllowance = pa;
+  if (grossAfterSacrifice > 100000 && pa > 0) {
+    personalAllowance = Math.max(0, pa - Math.floor((grossAfterSacrifice - 100000) / 2));
+  }
+
+  const taxable    = Math.max(0, grossAfterSacrifice - personalAllowance);
+  const basicBand  = yr.basicBand;
+  const higherBand = yr.higherTop - yr.pa - basicBand;
+
+  let tax = 0;
+  if (taxable <= basicBand) {
+    tax = taxable * 0.20;
+  } else if (taxable <= basicBand + higherBand) {
+    tax = basicBand * 0.20 + (taxable - basicBand) * 0.40;
+  } else {
+    tax = basicBand * 0.20 + higherBand * 0.40 + (taxable - basicBand - higherBand) * 0.45;
+  }
+
+  return { tax, personalAllowance };
+}
+
+// Tax year data — NI rates: niMain = PT→UEL, niHigh = above UEL
+const TAX_YEARS = {
+  '2627': {
+    label: '2026/27',
+    pa: 12570, basicBand: 37700, higherTop: 125140,
+    niPT: 12570, niUEL: 50270, niMain: 0.08, niHigh: 0.02,
+    loanThresholds: { '1': 26065, '2': 28470, '4': 32745, '5': 25000, 'pg': 21000 }
+  },
+  '2526': {
+    label: '2025/26',
+    pa: 12570, basicBand: 37700, higherTop: 125140,
+    niPT: 12570, niUEL: 50270, niMain: 0.08, niHigh: 0.02,
+    loanThresholds: { '1': 26065, '2': 28470, '4': 32745, '5': 25000, 'pg': 21000 }
+  },
+  '2425': {
+    label: '2024/25',
+    pa: 12570, basicBand: 37700, higherTop: 125140,
+    niPT: 12570, niUEL: 50270, niMain: 0.08, niHigh: 0.02,
+    loanThresholds: { '1': 24990, '2': 27295, '4': 31395, '5': 25000, 'pg': 21000 }
+  },
+  '2324': {
+    label: '2023/24',
+    pa: 12570, basicBand: 37700, higherTop: 125140,
+    niPT: 12570, niUEL: 50270, niMain: 0.12, niHigh: 0.02,
+    loanThresholds: { '1': 22015, '2': 27295, '4': 27660, '5': null,  'pg': 21000 }
+  },
+  '2223': {
+    label: '2022/23',
+    pa: 12570, basicBand: 37700, higherTop: 150000,
+    niPT: 12570, niUEL: 50270, niMain: 0.12, niHigh: 0.02,
+    loanThresholds: { '1': 20195, '2': 27295, '4': 25375, '5': null,  'pg': 21000 }
+  }
+};
+
+function calcNI(niableGross, yr) {
+  const { niPT, niUEL, niMain, niHigh } = yr;
+  if (niableGross <= niPT) return 0;
+  if (niableGross <= niUEL) return (niableGross - niPT) * niMain;
+  return (niUEL - niPT) * niMain + (niableGross - niUEL) * niHigh;
+}
+
+function toAnnual(val, period) {
+  if (!val || isNaN(val)) return 0;
+  if (period === 'month') return val * 12;
+  if (period === 'week')  return val * 52;
+  return val;
+}
+
+function calcSalary() {
+  const gross       = parseFloat(document.getElementById('s-gross').value);
+  const freq        = parseInt(document.getElementById('s-freq').value);
+  const taxCode     = document.getElementById('s-taxcode').value || '1257L';
+  const loan        = document.getElementById('s-loan').value;
+  const pensionPct  = (parseFloat(document.getElementById('s-pension').value) || 0) / 100;
+  const childcare   = (parseFloat(document.getElementById('s-childcare').value) || 0) * 12;
+  const yearKey     = document.getElementById('s-taxyear').value;
+  const yr          = TAX_YEARS[yearKey] || TAX_YEARS['2425'];
+
+  // Salary sacrifice
+  const sacTaxAmt = toAnnual(parseFloat(document.getElementById('s-sac-tax-amt').value), document.getElementById('s-sac-tax-per').value);
+  const sacNiAmt  = toAnnual(parseFloat(document.getElementById('s-sac-ni-amt').value),  document.getElementById('s-sac-ni-per').value);
+
+  if (!gross || gross <= 0) return alert('Enter a valid gross salary.');
+
+  // Tax exempt sacrifice + pension + childcare all reduce taxable gross
+  const pensionAmt   = gross * pensionPct;
+  const taxableGross = Math.max(0, gross - pensionAmt - childcare - sacTaxAmt);
+
+  // Income tax using tax code + year-specific UK bands
+  const { tax, personalAllowance } = calcIncomeTax(taxableGross, taxCode, yr);
+
+  // Student loan — use year-specific thresholds
+  const thresholds = yr.loanThresholds;
+  const loanRates  = { '1': 0.09, '2': 0.09, '4': 0.09, '5': 0.09, 'pg': 0.06 };
+  let loanAmt = 0;
+  if (loan !== 'none' && thresholds[loan]) {
+    loanAmt = Math.max(0, gross - thresholds[loan]) * loanRates[loan];
+  }
+
+  // NI — calculated on gross minus ALL sacrifice (tax-exempt and NI-only)
+  const niableGross = Math.max(0, gross - pensionAmt - childcare - sacTaxAmt - sacNiAmt);
+  const ni = calcNI(niableGross, yr);
+
+  const net = gross - pensionAmt - childcare - sacTaxAmt - sacNiAmt - tax - ni - loanAmt;
+
+  // Render
+  document.getElementById('s-net').textContent       = money(net);
+  document.getElementById('s-b-gross').textContent   = money(gross);
+  document.getElementById('s-b-pa').textContent      = money(personalAllowance);
+  document.getElementById('s-b-tax').textContent     = '− ' + money(tax);
+  document.getElementById('s-b-ni').textContent      = '− ' + money(ni);
+  document.getElementById('s-b-period').textContent  = money(net / freq);
+
+  const pensionRow = document.getElementById('s-pension-row');
+  if (pensionAmt > 0) {
+    document.getElementById('s-b-pension').textContent = '− ' + money(pensionAmt);
+    pensionRow.style.display = 'flex';
+  } else { pensionRow.style.display = 'none'; }
+
+  const childcareRow = document.getElementById('s-childcare-row');
+  if (childcare > 0) {
+    document.getElementById('s-b-childcare').textContent = '− ' + money(childcare);
+    childcareRow.style.display = 'flex';
+  } else { childcareRow.style.display = 'none'; }
+
+  const sacTaxRow = document.getElementById('s-sac-tax-row');
+  if (sacTaxAmt > 0) {
+    document.getElementById('s-b-sac-tax').textContent = '− ' + money(sacTaxAmt);
+    sacTaxRow.style.display = 'flex';
+  } else { sacTaxRow.style.display = 'none'; }
+
+  const sacNiRow = document.getElementById('s-sac-ni-row');
+  if (sacNiAmt > 0) {
+    document.getElementById('s-b-sac-ni').textContent = '− ' + money(sacNiAmt);
+    sacNiRow.style.display = 'flex';
+  } else { sacNiRow.style.display = 'none'; }
+
+  const loanRow = document.getElementById('s-loan-row');
+  if (loanAmt > 0) {
+    document.getElementById('s-b-loan').textContent = '− ' + money(loanAmt);
+    loanRow.style.display = 'flex';
+  } else { loanRow.style.display = 'none'; }
+
+  document.getElementById('s-result').classList.add('show');
+}
+
+/* ─── CURRENCY+ ──────────────────────────────────────────── */
+const ALL_CURRENCIES = [
+  ['GBP','British Pound','🇬🇧','£'],
+  ['USD','US Dollar','🇺🇸','$'],
+  ['EUR','Euro','🇪🇺','€'],
+  ['CAD','Canadian Dollar','🇨🇦','CA$'],
+  ['AUD','Australian Dollar','🇦🇺','A$'],
+  ['JPY','Japanese Yen','🇯🇵','¥'],
+  ['CHF','Swiss Franc','🇨🇭','Fr'],
+  ['CNY','Chinese Yuan','🇨🇳','¥'],
+  ['NZD','NZ Dollar','🇳🇿','NZ$'],
+  ['SEK','Swedish Krona','🇸🇪','kr'],
+  ['NOK','Norwegian Krone','🇳🇴','kr'],
+  ['DKK','Danish Krone','🇩🇰','kr'],
+  ['MXN','Mexican Peso','🇲🇽','$'],
+  ['BRL','Brazilian Real','🇧🇷','R$'],
+  ['INR','Indian Rupee','🇮🇳','₹'],
+  ['SGD','Singapore Dollar','🇸🇬','S$'],
+  ['HKD','Hong Kong Dollar','🇭🇰','HK$'],
+  ['KRW','South Korean Won','🇰🇷','₩'],
+  ['ZAR','South African Rand','🇿🇦','R'],
+  ['AED','UAE Dirham','🇦🇪','د.إ'],
+  ['THB','Thai Baht','🇹🇭','฿'],
+  ['TRY','Turkish Lira','🇹🇷','₺'],
+  ['PLN','Polish Zloty','🇵🇱','zł'],
+  ['SAR','Saudi Riyal','🇸🇦','﷼'],
+  ['ILS','Israeli Shekel','🇮🇱','₪'],
+  ['QAR','Qatari Riyal','🇶🇦','﷼'],
+  ['MYR','Malaysian Ringgit','🇲🇾','RM'],
+  ['IDR','Indonesian Rupiah','🇮🇩','Rp'],
+  ['PKR','Pakistani Rupee','🇵🇰','₨'],
+  ['EGP','Egyptian Pound','🇪🇬','E£'],
+  ['SOS','Somali Shilling','🇸🇴','Sh'],
+];
+
+let cList    = ['GBP','USD','EUR','CAD','AUD'];
+let cRates   = {};
+let cBase    = 0;
+let cBaseAmt = 1;
+
+function getCurrencyMeta(code) {
+  return ALL_CURRENCIES.find(c => c[0] === code) || [code, code, '🏳', code];
+}
+function rebuildAddSelect() {
+  const sel = document.getElementById('c-add-select');
+  sel.innerHTML = '';
+  ALL_CURRENCIES.forEach(([code, name, flag]) => {
+    if (!cList.includes(code)) sel.add(new Option(`${flag} ${code} — ${name}`, code));
+  });
+}
+function renderCurrencyList() {
+  const container = document.getElementById('c-list');
+  container.innerHTML = '';
+  cList.forEach((code, i) => {
+    const [, name, flag, sym] = getCurrencyMeta(code);
+    const isBase = (i === cBase);
+    const value  = isBase ? cBaseAmt : convertFromBase(cBaseAmt, code);
+    const displayVal = isNaN(value) ? '' : parseFloat(value.toFixed(4));
+    const row = document.createElement('div');
+    row.className = 'cur-row' + (isBase ? ' base' : '');
+    row.innerHTML = `
+      <div class="cur-flag-wrap">
+        ${flag}
+        ${cList.length > 2 ? `<button class="cur-remove" onclick="removeCurrency(${i})" title="Remove">✕</button>` : ''}
+      </div>
+      <div class="cur-info">
+        <span class="cur-name-text">${name}</span>
+        <span class="cur-code-text">${code}</span>
+      </div>
+      <div class="cur-pill${isBase ? ' base' : ''}">
+        <span class="cur-pill-sym">${sym}</span>
+        <input class="cur-amount-input" type="number" value="${displayVal}"
+          placeholder="0" data-index="${i}"
+          oninput="onCurInput(this, ${i})"
+          onfocus="setBase(${i})">
+      </div>
+    `;
+    row.addEventListener('click', (e) => {
+      if (!e.target.classList.contains('cur-amount-input') &&
+          !e.target.classList.contains('cur-remove') &&
+          !e.target.closest('.cur-remove')) {
+        setBase(i); row.querySelector('.cur-amount-input').focus();
+      }
+    });
+    container.appendChild(row);
+  });
+  rebuildAddSelect();
+}
+function setBase(i) {
+  // Read current displayed value for the newly-selected base
+  const inputs = document.querySelectorAll('.cur-amount-input');
+  const inputVal = parseFloat(inputs[i]?.value);
+  if (!isNaN(inputVal) && inputVal > 0) {
+    const code = cList[i];
+    if (i === cBase) {
+      cBaseAmt = code === 'GBP' ? inputVal : (cRates[code] ? inputVal / cRates[code] : cBaseAmt);
+      return; // same row — just update amount, no DOM change needed
+    }
+    const rateToGBP = code === 'GBP' ? 1 : (cRates[code] ? 1 / cRates[code] : null);
+    if (rateToGBP) cBaseAmt = inputVal * rateToGBP;
+  } else if (i === cBase) {
+    return; // nothing to do
+  }
+
+  cBase = i;
+
+  // Update styles in-place — never rebuild the list (avoids destroying focused input)
+  const rows = document.querySelectorAll('.cur-row');
+  rows.forEach((row, idx) => {
+    row.classList.toggle('base', idx === i);
+    const pill = row.querySelector('.cur-pill');
+    if (pill) pill.classList.toggle('base', idx === i);
+    const sym  = row.querySelector('.cur-pill-sym');
+    const inp  = row.querySelector('.cur-amount-input');
+    if (idx === i) {
+      if (sym) sym.style.color = '#FFFFFF';
+      if (inp) {
+        inp.style.color = '#000000';
+        const v = convertFromBase(cBaseAmt, cList[i]);
+        if (!isNaN(v)) inp.value = parseFloat(v.toFixed(4));
+      }
+    } else {
+      if (sym) sym.style.color = '#007AFF';
+      if (inp) {
+        inp.style.color = '#000000';
+        const converted = convertFromBase(cBaseAmt, cList[idx]);
+        inp.value = isNaN(converted) ? '' : parseFloat(converted.toFixed(4));
+      }
+    }
+  });
+}
+function onCurInput(input, i) {
+  const val = parseFloat(input.value);
+  if (isNaN(val)) return;
+  cBase = i;
+  const code = cList[i];
+  cBaseAmt = code === 'GBP' ? val : (cRates[code] ? val / cRates[code] : val);
+  const rows = document.querySelectorAll('.cur-row');
+  rows.forEach((row, idx) => {
+    row.classList.toggle('base', idx === i);
+    const pill = row.querySelector('.cur-pill');
+    if (pill) pill.classList.toggle('base', idx === i);
+    const sym = row.querySelector('.cur-pill-sym');
+    if (sym) sym.style.color = '#007AFF';
+    if (idx !== i) {
+      const inp = row.querySelector('.cur-amount-input');
+      const converted = convertFromBase(cBaseAmt, cList[idx]);
+      inp.value = isNaN(converted) ? '' : parseFloat(converted.toFixed(4));
+      inp.style.color = '#000000';
+    } else {
+      input.style.color = '#FFFFFF';
+    }
+  });
+}
+function convertFromBase(gbpAmt, code) {
+  if (code === 'GBP') return gbpAmt;
+  const rate = cRates[code];
+  return rate ? gbpAmt * rate : NaN;
+}
+function addCurrency() {
+  const sel = document.getElementById('c-add-select');
+  const code = sel.value;
+  if (!code || cList.includes(code)) return;
+  cList.push(code); renderCurrencyList();
+  if (!cRates[code]) fetchSingleRate('GBP', code);
+}
+function removeCurrency(i) {
+  if (cList.length <= 2) return;
+  cList.splice(i, 1);
+  if (cBase >= cList.length) cBase = 0;
+  renderCurrencyList();
+}
+const FALLBACK_RATES = {USD:1.27,EUR:1.17,CAD:1.73,AUD:1.94,JPY:198,CHF:1.12,CNY:9.2,NZD:2.12,SEK:13.5,NOK:13.8,DKK:8.72,MXN:25.4,BRL:7.1,INR:106,SGD:1.71,HKD:9.92,KRW:1740,ZAR:23.5,AED:4.66,THB:44.6,TRY:43,PLN:5.0,SAR:4.76,ILS:4.7,QAR:4.62,MYR:5.9,IDR:20700,PKR:355,EGP:62,SOS:726};
+
+async function refreshAllRates() {
+  const btn  = document.getElementById('c-refresh-btn');
+  const note = document.getElementById('c-note');
+  btn.disabled = true; btn.classList.add('loading');
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><path d="M4 4v5h5"/><path d="M20 20v-5h-5"/><path d="M4 9a9 9 0 0 1 15-2.7M20 15a9 9 0 0 1-15 2.7"/></svg> Fetching…`;
+  note.textContent = 'Fetching live rates…'; note.className = 'cur-rate-note';
+  try {
+    // Free open API — no key required, updates every hour
+    const res  = await fetch('https://open.er-api.com/v6/latest/GBP');
+    const data = await res.json();
+    if (data.result !== 'success') throw new Error('API error');
+    Object.assign(cRates, data.rates);
+    const now = new Date().toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
+    note.textContent = `Live rates at ${now} · tap a row to set base`;
+  } catch(e) {
+    note.textContent = 'Could not fetch live rates — using estimates';
+    note.className = 'cur-rate-note err';
+    Object.assign(cRates, FALLBACK_RATES);
+  } finally {
+    btn.disabled = false; btn.classList.remove('loading');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><path d="M4 4v5h5"/><path d="M20 20v-5h-5"/><path d="M4 9a9 9 0 0 1 15-2.7M20 15a9 9 0 0 1-15 2.7"/></svg> Refresh Rates`;
+    renderCurrencyList();
+  }
+}
+
+// Auto-fetch on load
+(function() { renderCurrencyList(); rebuildAddSelect(); refreshAllRates(); })();
+
+/* ─── STAMP DUTY ────────────────────────────────────────── */
+// England & NI rates from 1 April 2025
+function sdStandard(p) {
+  let d = 0;
+  if (p > 1500000) d += (p - 1500000) * 0.12;
+  if (p > 925000)  d += (Math.min(p, 1500000) - 925000) * 0.10;
+  if (p > 250000)  d += (Math.min(p, 925000)  - 250000) * 0.05;
+  if (p > 125000)  d += (Math.min(p, 250000)  - 125000) * 0.02;
+  return d;
+}
+function sdAdditional(p) {
+  // Standard + 5% surcharge on every band including zero band
+  let d = 0;
+  d += Math.min(p, 125000) * 0.05;
+  if (p > 125000) d += (Math.min(p, 250000)  - 125000) * 0.07;
+  if (p > 250000) d += (Math.min(p, 925000)  - 250000) * 0.10;
+  if (p > 925000) d += (Math.min(p, 1500000) - 925000) * 0.15;
+  if (p > 1500000) d += (p - 1500000) * 0.17;
+  return d;
+}
+function calcStampDuty() {
+  const price = parseFloat(document.getElementById('sd-price').value);
+  const type  = document.getElementById('sd-type').value;
+  if (!price || price <= 0) return alert('Enter a valid property price.');
+
+  let duty = 0, note = '';
+  let bands = [];
+
+  if (type === 'ftb') {
+    if (price <= 500000) {
+      duty = price > 300000 ? (Math.min(price, 500000) - 300000) * 0.05 : 0;
+      note = 'First-time buyer relief applied';
+      bands = [
+        ['£0 – £300,000','0%', 0],
+        ['£300k – £500k','5%', duty],
+      ];
+    } else {
+      duty = sdStandard(price);
+      note = 'Above £500k — standard rates, no FTB relief';
+      bands = stdBands(price);
+    }
+  } else if (type === 'additional') {
+    duty = sdAdditional(price);
+    note = 'Includes 5% additional dwelling surcharge';
+    bands = [
+      ['£0 – £125,000','5%',  Math.min(price,125000)*0.05],
+      ['£125k – £250k','7%',  price>125000?(Math.min(price,250000)-125000)*0.07:0],
+      ['£250k – £925k','10%', price>250000?(Math.min(price,925000)-250000)*0.10:0],
+      ['£925k – £1.5m','15%', price>925000?(Math.min(price,1500000)-925000)*0.15:0],
+      ['£1.5m+','17%',        price>1500000?(price-1500000)*0.17:0],
+    ];
+  } else {
+    duty = sdStandard(price);
+    note = 'England & Northern Ireland';
+    bands = stdBands(price);
+  }
+
+  function stdBands(p) {
+    return [
+      ['£0 – £125,000','0%', 0],
+      ['£125k – £250k','2%', p>125000?(Math.min(p,250000)-125000)*0.02:0],
+      ['£250k – £925k','5%', p>250000?(Math.min(p,925000)-250000)*0.05:0],
+      ['£925k – £1.5m','10%',p>925000?(Math.min(p,1500000)-925000)*0.10:0],
+      ['£1.5m+','12%',       p>1500000?(p-1500000)*0.12:0],
+    ];
+  }
+
+  const eff = price > 0 ? ((duty/price)*100).toFixed(2) : 0;
+  document.getElementById('sd-total').textContent = money(duty);
+  document.getElementById('sd-eff').textContent   = `Effective rate: ${eff}% · ${note}`;
+  document.getElementById('sd-breakdown').innerHTML = bands
+    .filter(([,,v]) => v >= 0)
+    .map(([band,rate,v]) => `<div class="brow"><span>${band} <span style="font-size:0.7rem;color:var(--label3)">(${rate})</span></span><span>${money(v)}</span></div>`)
+    .join('');
+  document.getElementById('sd-result').classList.add('show');
+}
+
+/* ─── VAT ───────────────────────────────────────────────── */
+function calcVAT() {
+  const amount = parseFloat(document.getElementById('v-amount').value);
+  const rate   = parseFloat(document.getElementById('v-rate').value) / 100;
+  const mode   = document.getElementById('v-mode').value;
+  const pct    = Math.round(rate * 100);
+  document.getElementById('v-rate-label').textContent = `VAT (${pct}%)`;
+  if (!amount || amount <= 0) {
+    ['v-net','v-vat','v-gross'].forEach(id => document.getElementById(id).textContent = '—');
+    return;
+  }
+  let net, vat, gross;
+  if (mode === 'add') { net = amount; vat = amount * rate; gross = amount + vat; }
+  else                { gross = amount; net = amount / (1 + rate); vat = gross - net; }
+  document.getElementById('v-net').textContent   = money(net);
+  document.getElementById('v-vat').textContent   = money(vat);
+  document.getElementById('v-gross').textContent = money(gross);
+}
+
+/* ─── MORTGAGE ──────────────────────────────────────────── */
+function updateLTV() {
+  const price   = parseFloat(document.getElementById('m-price').value);
+  const deposit = parseFloat(document.getElementById('m-deposit').value);
+  const el = document.getElementById('m-ltv');
+  if (price && deposit && price > 0) {
+    const ltv = ((price - deposit) / price * 100);
+    el.textContent = ltv.toFixed(1) + '%';
+    el.style.color = ltv > 90 ? 'var(--red)' : ltv > 75 ? 'var(--orange)' : 'var(--blue)';
+  } else { el.textContent = '—'; }
+}
+function calcMortgage() {
+  const price   = parseFloat(document.getElementById('m-price').value);
+  const deposit = parseFloat(document.getElementById('m-deposit').value) || 0;
+  const annual  = parseFloat(document.getElementById('m-rate').value) / 100;
+  const years   = parseInt(document.getElementById('m-term').value);
+  const type    = document.getElementById('m-type').value;
+  if (!price || !annual || !years) return alert('Fill in property price, interest rate and term.');
+  const loan    = price - deposit;
+  const months  = years * 12;
+  const mr      = annual / 12;
+  let monthly, totalPaid, totalInterest;
+  if (type === 'interest') {
+    monthly = loan * mr;
+    totalPaid = monthly * months + loan;
+    totalInterest = monthly * months;
+  } else {
+    monthly = mr === 0 ? loan / months : loan * (mr * Math.pow(1+mr, months)) / (Math.pow(1+mr, months) - 1);
+    totalPaid = monthly * months;
+    totalInterest = totalPaid - loan;
+  }
+  document.getElementById('m-monthly').textContent    = money(monthly);
+  document.getElementById('m-b-loan').textContent     = money(loan);
+  document.getElementById('m-b-interest').textContent = money(totalInterest);
+  document.getElementById('m-b-total').textContent    = money(totalPaid);
+  document.getElementById('m-result').classList.add('show');
+}
+
+/* ─── SAVINGS / ISA ─────────────────────────────────────── */
+function calcSavings() {
+  const initial = parseFloat(document.getElementById('sv-initial').value) || 0;
+  const contrib = parseFloat(document.getElementById('sv-monthly').value) || 0;
+  const rate    = parseFloat(document.getElementById('sv-rate').value) / 100;
+  const years   = parseInt(document.getElementById('sv-years').value);
+  const type    = document.getElementById('sv-type').value;
+  if (!years || (!initial && !contrib)) return alert('Enter at least a starting amount or monthly contribution, plus years.');
+  const mr = rate / 12;
+  let balance = initial;
+  for (let i = 0; i < years * 12; i++) { balance = (balance + contrib) * (1 + mr); }
+  const totalContrib = initial + contrib * years * 12;
+  const interest = balance - totalContrib;
+  let bonus = 0;
+  if (type === 'lisa') {
+    const annualContrib = Math.min(contrib * 12, 4000);
+    bonus = annualContrib * 0.25 * years;
+    balance += bonus;
+  }
+  document.getElementById('sv-total').textContent      = money(balance);
+  document.getElementById('sv-b-contrib').textContent  = money(totalContrib);
+  document.getElementById('sv-b-interest').textContent = '+' + money(interest);
+  const bonusRow = document.getElementById('sv-bonus-row');
+  if (type === 'lisa' && bonus > 0) {
+    document.getElementById('sv-b-bonus').textContent = '+' + money(bonus);
+    bonusRow.style.display = 'flex';
+  } else { bonusRow.style.display = 'none'; }
+  document.getElementById('sv-result').classList.add('show');
+}
+
+/* ─── MILEAGE ───────────────────────────────────────────── */
+function calcMileage() {
+  const miles   = parseFloat(document.getElementById('mi-miles').value);
+  const mpg     = parseFloat(document.getElementById('mi-mpg').value);
+  const ppl     = parseFloat(document.getElementById('mi-ppl').value);
+  const vehicle = document.getElementById('mi-vehicle').value;
+  const ytd     = parseFloat(document.getElementById('mi-ytd').value) || 0;
+  if (!miles) return alert('Enter distance in miles.');
+  // Fuel cost (1 UK gallon = 4.54609 litres)
+  const fuelCost = (mpg && ppl) ? miles * (4.54609 / mpg) * (ppl / 100) : null;
+  // HMRC claim
+  let claim = 0;
+  if (vehicle === 'car') {
+    const first = Math.max(0, Math.min(miles, Math.max(0, 10000 - ytd)));
+    claim = first * 0.45 + (miles - first) * 0.25;
+  } else if (vehicle === 'bike') { claim = miles * 0.24; }
+  else                           { claim = miles * 0.20; }
+  document.getElementById('mi-fuel').textContent  = fuelCost != null ? money(fuelCost) : 'Enter MPG & fuel price';
+  document.getElementById('mi-claim').textContent = money(claim);
+  document.getElementById('mi-profit').textContent = fuelCost != null ? money(claim - fuelCost) : '—';
+  document.getElementById('mi-result').classList.add('show');
+}
+
+/* ─── MENU ───────────────────────────────────────────────── */
+function toggleMenu() {
+  const overlay = document.getElementById('menu-overlay');
+  const panel   = document.getElementById('menu-panel');
+  const open    = panel.classList.contains('open');
+  if (open) {
+    panel.classList.remove('open');
+    overlay.classList.remove('open');
+  } else {
+    overlay.classList.add('open');
+    panel.classList.add('open');
+  }
+}
+function closeMenu() {
+  document.getElementById('menu-panel').classList.remove('open');
+  document.getElementById('menu-overlay').classList.remove('open');
+}
+function menuTab(name) {
+  closeMenu();
+  // find the tab button with matching text and click it
+  const tabs = document.querySelectorAll('.tab-btn');
+  tabs.forEach(btn => {
+    if (btn.textContent.trim().toLowerCase().includes(name.toLowerCase())) {
+      btn.click();
+      btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  });
+}
+
+/* ─── ABOUT ──────────────────────────────────────────────── */
+function openAbout() {
+  closeMenu();
+  document.getElementById('about-overlay').classList.add('open');
+}
+function closeAbout(e) {
+  if (e.target === document.getElementById('about-overlay') || e.target.classList.contains('action-btn')) {
+    document.getElementById('about-overlay').classList.remove('open');
+  }
+}
+
+</script>
+</body>
+</html>
