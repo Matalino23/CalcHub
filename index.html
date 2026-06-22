@@ -449,7 +449,8 @@ header {
    FORM PANELS (Salary, Currency, Moorage)
    ══════════════════════════════════════════════ */
 #panel-salary, #panel-currency, #panel-stamp,
-#panel-vat, #panel-mortgage, #panel-savings, #panel-mileage {
+#panel-vat, #panel-mortgage, #panel-savings, #panel-mileage,
+#panel-council, #panel-student, #panel-iht, #panel-selfemployed {
   padding: 1.6rem 1.5rem 2rem;
 }
 
@@ -893,7 +894,7 @@ select { cursor: pointer; }
 @media (max-width: 440px) {
   .hub { max-width: 100%; }
   .card { border-radius: 18px; }
-  #panel-salary, #panel-currency, #panel-stamp, #panel-vat, #panel-mortgage, #panel-savings, #panel-mileage { padding: 1.3rem 1.1rem 1.6rem; }
+  #panel-salary, #panel-currency, #panel-stamp, #panel-vat, #panel-mortgage, #panel-savings, #panel-mileage, #panel-council, #panel-student, #panel-iht, #panel-selfemployed { padding: 1.3rem 1.1rem 1.6rem; }
   .row2 { grid-template-columns: 1fr; }
   .tab-btn .tab-label { display: none; }
   .keypad { gap: 9px; padding: 0 10px 12px; }
@@ -950,6 +951,19 @@ select { cursor: pointer; }
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Mileage & Fuel
   </button>
 
+  <div class="menu-divider"></div>
+  <button class="menu-item" onclick="menuTab('council')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 22V8l9-6 9 6v14"/><path d="M9 22V12h6v10"/></svg>Council Tax
+  </button>
+  <button class="menu-item" onclick="menuTab('student')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>Student Loan
+  </button>
+  <button class="menu-item" onclick="menuTab('iht')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Inheritance Tax
+  </button>
+  <button class="menu-item" onclick="menuTab('selfemployed')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Self-Employed
+  </button>
   <div class="menu-divider"></div>
   <div class="menu-section">Info</div>
   <button class="menu-item" onclick="openAbout()">
@@ -1033,6 +1047,22 @@ select { cursor: pointer; }
     <button class="tab-btn" onclick="switchTab('mileage',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       <span class="tab-label">Mileage</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('council',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 22V8l9-6 9 6v14"/><path d="M9 22V12h6v10"/></svg>
+      <span class="tab-label">Council Tax</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('student',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      <span class="tab-label">Student Loan</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('iht',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <span class="tab-label">Inheritance Tax</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('selfemployed',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+      <span class="tab-label">Self-Employed</span>
     </button>
   </div>
 
@@ -1286,14 +1316,22 @@ select { cursor: pointer; }
         <div class="breakdown" id="sd-breakdown"></div>
       </div>
 
-      <!-- MoneySuperMarket affiliate card
-           Sign up via AWIN: https://www.awin.com/gb/advertiser/moneysupermarket-group
-           Replace YOUR_MSM_MORTGAGE_LINK with your affiliate URL -->
+      <!-- MoneySuperMarket affiliate — Replace YOUR_MSM_MORTGAGE_LINK -->
       <a class="affiliate-card" href="YOUR_MSM_MORTGAGE_LINK" target="_blank" rel="noopener sponsored">
         <div class="affiliate-icon" style="background:#fff4e5;">🏡</div>
         <div class="affiliate-body">
           <div class="affiliate-title">Compare mortgages</div>
           <div class="affiliate-sub">Find the best mortgage deal for your budget on MoneySuperMarket.</div>
+        </div>
+        <span class="affiliate-cta">Compare →</span>
+      </a>
+
+      <!-- Compare the Market affiliate — Sign up via AWIN, replace YOUR_CTM_LINK -->
+      <a class="affiliate-card" href="YOUR_CTM_LINK" target="_blank" rel="noopener sponsored">
+        <div class="affiliate-icon" style="background:#e8f4fd;">🐜</div>
+        <div class="affiliate-body">
+          <div class="affiliate-title">Compare the Market</div>
+          <div class="affiliate-sub">Compare home insurance deals alongside your stamp duty — could save you hundreds.</div>
         </div>
         <span class="affiliate-cta">Compare →</span>
       </a>
@@ -1399,7 +1437,7 @@ select { cursor: pointer; }
         </div>
       </div>
 
-      <!-- MoneySuperMarket affiliate card — same link as Stamp Duty tab -->
+      <!-- MoneySuperMarket affiliate — Replace YOUR_MSM_MORTGAGE_LINK -->
       <a class="affiliate-card" href="YOUR_MSM_MORTGAGE_LINK" target="_blank" rel="noopener sponsored">
         <div class="affiliate-icon" style="background:#fff4e5;">🏦</div>
         <div class="affiliate-body">
@@ -1407,6 +1445,26 @@ select { cursor: pointer; }
           <div class="affiliate-sub">Search 1,000s of deals. Find the right rate for your home.</div>
         </div>
         <span class="affiliate-cta">Compare →</span>
+      </a>
+
+      <!-- Compare the Market affiliate — Replace YOUR_CTM_LINK -->
+      <a class="affiliate-card" href="YOUR_CTM_LINK" target="_blank" rel="noopener sponsored">
+        <div class="affiliate-icon" style="background:#e8f4fd;">🐜</div>
+        <div class="affiliate-body">
+          <div class="affiliate-title">Compare the Market</div>
+          <div class="affiliate-sub">Compare mortgage and insurance deals in minutes.</div>
+        </div>
+        <span class="affiliate-cta">Compare →</span>
+      </a>
+
+      <!-- Habito affiliate — Sign up at habito.com/partners, replace YOUR_HABITO_LINK -->
+      <a class="affiliate-card" href="YOUR_HABITO_LINK" target="_blank" rel="noopener sponsored">
+        <div class="affiliate-icon" style="background:#f0f0ff;">🏠</div>
+        <div class="affiliate-body">
+          <div class="affiliate-title">Find your mortgage with Habito</div>
+          <div class="affiliate-sub">Free online mortgage broker. Searches 90+ lenders to find your best deal.</div>
+        </div>
+        <span class="affiliate-cta">Get started →</span>
       </a>
     </div>
 
@@ -1509,6 +1567,168 @@ select { cursor: pointer; }
           <div class="brow" style="padding-top:0.45rem;border-top:0.5px solid var(--sep)">
             <span>💰 Net Claim Profit</span><span id="mi-profit" style="color:var(--blue)">—</span>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ COUNCIL TAX ═══════════════════════════════ -->
+    <div class="panel" id="panel-council">
+      <div class="section-label">Council Tax Calculator</div>
+      <p class="panel-note">England · 2024/25 average rates by band</p>
+
+      <div class="field">
+        <label>Council Tax Band</label>
+        <select id="ct-band">
+          <option value="">Select band…</option>
+          <option value="A">Band A — up to £40,000</option>
+          <option value="B">Band B — £40,001–£52,000</option>
+          <option value="C">Band C — £52,001–£68,000</option>
+          <option value="D">Band D — £68,001–£88,000</option>
+          <option value="E">Band E — £88,001–£120,000</option>
+          <option value="F">Band F — £120,001–£160,000</option>
+          <option value="G">Band G — £160,001–£320,000</option>
+          <option value="H">Band H — over £320,000</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Discount</label>
+        <select id="ct-discount">
+          <option value="0">No discount (full rate)</option>
+          <option value="25">25% — Single person</option>
+          <option value="50">50% — Fully exempt occupant</option>
+          <option value="100">100% — Empty / student household</option>
+        </select>
+      </div>
+
+      <button class="action-btn" onclick="calcCouncilTax()">Calculate</button>
+
+      <div class="result-box" id="ct-result">
+        <div class="res-label">Estimated Annual Bill</div>
+        <div class="res-val" id="ct-annual">—</div>
+        <div class="breakdown">
+          <div class="brow"><span>Monthly</span><span id="ct-monthly">—</span></div>
+          <div class="brow"><span>Weekly</span><span id="ct-weekly">—</span></div>
+        </div>
+        <div class="res-note">Based on England average Band D of £2,171 (2024/25). Your local council may differ.</div>
+      </div>
+    </div>
+
+    <!-- ══ STUDENT LOAN ════════════════════════════════ -->
+    <div class="panel" id="panel-student">
+      <div class="section-label">Student Loan Repayment</div>
+      <p class="panel-note">Plans 1, 2, 4 &amp; 5 · thresholds 2024/25</p>
+
+      <div class="field">
+        <label>Repayment Plan</label>
+        <select id="sl-plan">
+          <option value="1">Plan 1 — started before Sept 2012 (England/Wales)</option>
+          <option value="2" selected>Plan 2 — started Sept 2012–July 2023 (England/Wales)</option>
+          <option value="4">Plan 4 — Scotland</option>
+          <option value="5">Plan 5 — started Aug 2023 onwards</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Annual Salary (before tax)</label>
+        <div class="prefix-wrap">
+          <span class="prefix">£</span>
+          <input type="number" id="sl-salary" placeholder="e.g. 35000" style="padding-left:1.8rem">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Outstanding Loan Balance</label>
+        <div class="prefix-wrap">
+          <span class="prefix">£</span>
+          <input type="number" id="sl-balance" placeholder="e.g. 45000" style="padding-left:1.8rem">
+        </div>
+      </div>
+
+      <button class="action-btn" onclick="calcStudentLoan()">Calculate</button>
+
+      <div class="result-box" id="sl-result">
+        <div class="res-label">Annual Repayment</div>
+        <div class="res-val" id="sl-annual">—</div>
+        <div class="breakdown">
+          <div class="brow"><span>Monthly repayment</span><span id="sl-monthly">—</span></div>
+          <div class="brow"><span>Repayment threshold</span><span id="sl-threshold">—</span></div>
+          <div class="brow"><span>Rate (9% above threshold)</span><span>9%</span></div>
+        </div>
+        <div class="res-note" id="sl-note"></div>
+      </div>
+    </div>
+
+    <!-- ══ INHERITANCE TAX ════════════════════════════ -->
+    <div class="panel" id="panel-iht">
+      <div class="section-label">Inheritance Tax Calculator</div>
+      <p class="panel-note">England, Wales &amp; Northern Ireland · 2024/25</p>
+
+      <div class="field">
+        <label>Total Estate Value</label>
+        <div class="prefix-wrap">
+          <span class="prefix">£</span>
+          <input type="number" id="iht-estate" placeholder="e.g. 600000" style="padding-left:1.8rem">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Are you leaving your home to direct descendants?</label>
+        <select id="iht-rnrb">
+          <option value="yes">Yes — claim Residence Nil Rate Band</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Did spouse/civil partner predecease &amp; pass their allowance?</label>
+        <select id="iht-spouse">
+          <option value="no">No — single nil rate band (£325,000)</option>
+          <option value="yes">Yes — double nil rate band (£650,000)</option>
+        </select>
+      </div>
+
+      <button class="action-btn" onclick="calcIHT()">Calculate</button>
+
+      <div class="result-box" id="iht-result">
+        <div class="res-label">Inheritance Tax Due</div>
+        <div class="res-val" id="iht-tax">—</div>
+        <div class="breakdown">
+          <div class="brow"><span>Nil rate band</span><span id="iht-nrb">—</span></div>
+          <div class="brow"><span>Residence nil rate band</span><span id="iht-rnrb-val">—</span></div>
+          <div class="brow"><span>Taxable estate</span><span id="iht-taxable">—</span></div>
+          <div class="brow"><span>IHT rate</span><span>40%</span></div>
+        </div>
+        <div class="res-note">This is an estimate. Gifts, trusts and reliefs may reduce the bill.</div>
+      </div>
+    </div>
+
+    <!-- ══ SELF-EMPLOYED ═══════════════════════════════ -->
+    <div class="panel" id="panel-selfemployed">
+      <div class="section-label">Self-Employed Tax &amp; NI</div>
+      <p class="panel-note">England · 2024/25 tax year</p>
+
+      <div class="field">
+        <label>Annual Profit (income minus expenses)</label>
+        <div class="prefix-wrap">
+          <span class="prefix">£</span>
+          <input type="number" id="se-profit" placeholder="e.g. 40000" style="padding-left:1.8rem">
+        </div>
+      </div>
+
+      <button class="action-btn" onclick="calcSelfEmployed()">Calculate</button>
+
+      <div class="result-box" id="se-result">
+        <div class="res-label">Take-Home Pay</div>
+        <div class="res-val" id="se-takehome">—</div>
+        <div class="breakdown">
+          <div class="brow"><span>Income Tax</span><span id="se-tax">—</span></div>
+          <div class="brow"><span>Class 2 NI</span><span id="se-ni2">—</span></div>
+          <div class="brow"><span>Class 4 NI</span><span id="se-ni4">—</span></div>
+          <div class="brow" style="padding-top:0.45rem;border-top:0.5px solid var(--sep)">
+            <span>Total deductions</span><span id="se-total-ded">—</span>
+          </div>
+          <div class="brow"><span>Effective tax rate</span><span id="se-eff">—</span></div>
         </div>
       </div>
     </div>
@@ -2182,6 +2402,103 @@ function calcMileage() {
   document.getElementById('mi-claim').textContent = money(claim);
   document.getElementById('mi-profit').textContent = fuelCost != null ? money(claim - fuelCost) : '—';
   document.getElementById('mi-result').classList.add('show');
+}
+
+/* ─── COUNCIL TAX ───────────────────────────────────────── */
+const CT_BAND_MULTIPLIERS = { A:6/9, B:7/9, C:8/9, D:1, E:11/9, F:13/9, G:15/9, H:18/9 };
+const CT_BAND_D_ENGLAND = 2171; // 2024/25 England average
+
+function calcCouncilTax() {
+  const band     = document.getElementById('ct-band').value;
+  const discount = parseFloat(document.getElementById('ct-discount').value) / 100;
+  if (!band) { alert('Please select a band.'); return; }
+  const annual = CT_BAND_D_ENGLAND * CT_BAND_MULTIPLIERS[band] * (1 - discount);
+  document.getElementById('ct-annual').textContent  = '£' + annual.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  document.getElementById('ct-monthly').textContent = '£' + (annual / 12).toFixed(2);
+  document.getElementById('ct-weekly').textContent  = '£' + (annual / 52).toFixed(2);
+  document.getElementById('ct-result').style.display = 'block';
+}
+
+/* ─── STUDENT LOAN ──────────────────────────────────────── */
+const SL_THRESHOLDS = { 1: 24990, 2: 27295, 4: 31395, 5: 25000 };
+
+function calcStudentLoan() {
+  const plan    = parseInt(document.getElementById('sl-plan').value);
+  const salary  = parseFloat(document.getElementById('sl-salary').value);
+  const balance = parseFloat(document.getElementById('sl-balance').value);
+  if (isNaN(salary)) { alert('Please enter your salary.'); return; }
+  const threshold = SL_THRESHOLDS[plan];
+  const repayable = Math.max(0, salary - threshold);
+  const annual    = repayable * 0.09;
+  const monthly   = annual / 12;
+  const fmt = n => '£' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  document.getElementById('sl-annual').textContent    = fmt(annual);
+  document.getElementById('sl-monthly').textContent  = fmt(monthly);
+  document.getElementById('sl-threshold').textContent = fmt(threshold);
+  const note = document.getElementById('sl-note');
+  if (!isNaN(balance) && balance > 0 && annual > 0) {
+    const years = Math.ceil(balance / annual);
+    note.textContent = `At this rate you'd repay in approx. ${years} year${years===1?'':'s'} (before interest).`;
+  } else if (annual === 0) {
+    note.textContent = 'Your salary is below the repayment threshold — no payments due.';
+  } else { note.textContent = ''; }
+  document.getElementById('sl-result').style.display = 'block';
+}
+
+/* ─── INHERITANCE TAX ───────────────────────────────────── */
+function calcIHT() {
+  const estate = parseFloat(document.getElementById('iht-estate').value);
+  if (isNaN(estate)) { alert('Please enter the estate value.'); return; }
+  const spouseDouble = document.getElementById('iht-spouse').value === 'yes';
+  const rnrbClaim    = document.getElementById('iht-rnrb').value === 'yes';
+  const nrb   = spouseDouble ? 650000 : 325000;
+  const rnrb  = rnrbClaim ? (spouseDouble ? 350000 : 175000) : 0;
+  const total_exempt = nrb + rnrb;
+  const taxable = Math.max(0, estate - total_exempt);
+  const tax     = taxable * 0.40;
+  const fmt = n => '£' + n.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  document.getElementById('iht-tax').textContent      = fmt(tax);
+  document.getElementById('iht-nrb').textContent      = fmt(nrb);
+  document.getElementById('iht-rnrb-val').textContent = fmt(rnrb);
+  document.getElementById('iht-taxable').textContent  = fmt(taxable);
+  document.getElementById('iht-result').style.display = 'block';
+}
+
+/* ─── SELF-EMPLOYED ─────────────────────────────────────── */
+function calcSelfEmployed() {
+  const profit = parseFloat(document.getElementById('se-profit').value);
+  if (isNaN(profit)) { alert('Please enter your profit.'); return; }
+
+  // Income Tax 2024/25
+  const PA = 12570;
+  let tax = 0;
+  if (profit > PA) {
+    const basic = Math.min(profit, 50270) - PA;
+    tax += Math.max(0, basic) * 0.20;
+  }
+  if (profit > 50270) tax += (Math.min(profit, 125140) - 50270) * 0.40;
+  if (profit > 125140) tax += (profit - 125140) * 0.45;
+
+  // Class 2 NI (£3.45/week if profit > £12,570)
+  const ni2 = profit > 12570 ? 3.45 * 52 : 0;
+
+  // Class 4 NI
+  let ni4 = 0;
+  if (profit > 12570) ni4 += (Math.min(profit, 50270) - 12570) * 0.09;
+  if (profit > 50270) ni4 += (profit - 50270) * 0.02;
+
+  const totalDed = tax + ni2 + ni4;
+  const takeHome = profit - totalDed;
+  const effRate  = profit > 0 ? (totalDed / profit * 100).toFixed(1) : 0;
+
+  const fmt = n => '£' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  document.getElementById('se-takehome').textContent  = fmt(takeHome);
+  document.getElementById('se-tax').textContent       = fmt(tax);
+  document.getElementById('se-ni2').textContent       = fmt(ni2);
+  document.getElementById('se-ni4').textContent       = fmt(ni4);
+  document.getElementById('se-total-ded').textContent = fmt(totalDed);
+  document.getElementById('se-eff').textContent       = effRate + '%';
+  document.getElementById('se-result').style.display  = 'block';
 }
 
 /* ─── MENU ───────────────────────────────────────────────── */
